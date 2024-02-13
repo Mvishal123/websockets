@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Websockets</title>
+  </head>
+  <style>
+    .message-div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      max-width: 20vw;
+      justify-items: center;
+    }
+
+    .messages {
+      margin: 5px 2px;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+  <body>
+    <div class="message-div">
+      <div>
+        <label for="inp">Message</label>
+        <input type="text" id="inp" />
+      </div>
+      <button class="sendBtn">Send</button>
+    </div>
+    <div class="messages"></div>
+  </body>
+  <script>
+    const ws = new WebSocket("ws://localhost:8080");
+
+    const message = document.getElementById("inp");
+    const sendBtn = document.querySelector(".sendBtn");
+    const messageContainer = document.querySelector(".messages");
+    const div = document.createElement("div");
+
+    // console.log({ message, button, messageContainer });
+
+    sendBtn.addEventListener("click", () => {
+      console.log("Clicked");
+      ws.send(message.value ?? "null");
+    });
+
+    ws.onmessage = (event) => {
+      console.log("MEssage client:", event.data);
+      messageContainer.appendChild(
+        div.appendChild(document.createTextNode(event.data))
+      );
+    };
+  </script>
+</html>
