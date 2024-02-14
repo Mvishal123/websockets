@@ -8,10 +8,11 @@ const server = http.createServer();
 const wss = new WebSocketServer({ server });
 
 let client: any = [];
+let clientSet = new Set();
 
 wss.on("connection", (ws) => {
   console.log("WebSocket connected...");
-  client.push(ws);
+  clientSet.add(ws);
 
   ws.on("error", (error) => {
     console.log("WebSocket error:", error);
@@ -19,7 +20,7 @@ wss.on("connection", (ws) => {
 
   ws.on("message", (message) => {
     // console.log("WebSocket message:", message);
-    client.forEach((c: any) => {
+    clientSet.forEach((c: any) => {
       // if (c !== ws) {
         c.send("Hey " + message.toString());
       // }
